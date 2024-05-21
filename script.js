@@ -25,6 +25,7 @@ async function fetchData() {
 
 function search() {
     const query = document.getElementById('searchInput').value.toLowerCase();
+    console.log('Search Query:', query); // Debugging line
     const resultsDiv = document.getElementById('results');
     resultsDiv.innerHTML = '';
 
@@ -36,13 +37,18 @@ function search() {
         (item.decade && item.decade.toLowerCase().includes(query)) ||
         (item.genre && item.genre.toLowerCase().includes(query))
     );
+    console.log('Filtered Data:', filteredData); // Debugging line
 
-    filteredData.forEach(item => {
-        const resultItem = document.createElement('div');
-        resultItem.className = 'result-item';
-        resultItem.innerHTML = `<a href="${item.link}">${item.name}</a>`;
-        resultsDiv.appendChild(resultItem);
-    });
+    if (filteredData.length === 0) {
+        resultsDiv.innerHTML = '<p>No results found</p>';
+    } else {
+        filteredData.forEach(item => {
+            const resultItem = document.createElement('div');
+            resultItem.className = 'result-item';
+            resultItem.innerHTML = `<a href="${item.link}">${item.name}</a>`;
+            resultsDiv.appendChild(resultItem);
+        });
+    }
 }
 
 window.onload = fetchData;
