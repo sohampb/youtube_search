@@ -1,4 +1,6 @@
 let data = [];
+let uniqueDecades = new Set();
+let uniqueTagsGenres = new Set();
 
 async function fetchData() {
     try {
@@ -17,9 +19,11 @@ async function fetchData() {
                     actors: row['Actors'] ? row['Actors'].trim() : '',
                     director: row['Director'] ? row['Director'].trim() : '',
                     decade: row['Decade'] ? row['Decade'].trim() : '',
-                    genre: row['Genre'] ? row['Genre'].trim() : ''
+                    genre: row['Genre'] ? row['Genre'].trim() : '',
+                    similarStuff: row['Similar Stuff'] ? row['Similar Stuff'].trim() : ''
                 }));
                 console.log('Parsed Data:', data); // Debugging line
+                populateDropdowns();
             }
         });
     } catch (error) {
@@ -27,22 +31,55 @@ async function fetchData() {
     }
 }
 
+function populateDropdowns() {
+    data.forEach(item => {
+        if (item.decade) {
+            uniqueDecades.add(item.decade);
+        }
+        if (item.tags) {
+            item.tags.split(',').forEach(tag => uniqueTagsGenres.add(tag.trim()));
+        }
+        if (item.genre) {
+            uniqueTagsGenres.add(item.genre);
+        }
+    });
+
+    const decadeSelect = document.getElementById('decade');
+    uniqueDecades.forEach(decade => {
+        const option = document.createElement('option');
+        option.value = decade;
+        option.textContent = decade;
+        decadeSelect.appendChild(option);
+    });
+
+    const tagGenreSelect = document.getElementById('tagGenre');
+    uniqueTagsGenres.forEach(tagGenre => {
+        const option = document.createElement('option');
+        option.value = tagGenre;
+        option.textContent = tagGenre;
+        tagGenreSelect.appendChild(option);
+    });
+}
+
 function search() {
-    const query = document.getElementById('searchInput').value.toLowerCase().trim();
-    console.log('Search Query:', query); // Debugging line
+    const decade = document.getElementById('decade').value.toLowerCase().trim();
+    const actor = document.getElementById('actor').value.toLowerCase().trim();
+    const director = document.getElementById('director').value.toLowerCase().trim();
+    const tagGenre = document.getElementById('tagGenre').value.toLowerCase().trim();
+    const similarStuff = document.getElementById('similarStuff').value.toLowerCase().trim();
+
+    console.log('Search Query:', { decade, actor, director, tagGenre, similarStuff }); // Debugging line
     const resultsDiv = document.getElementById('results');
     resultsDiv.innerHTML = '';
 
     const filteredData = data.filter(item => {
-        const match = 
-            (item.name && item.name.toLowerCase().includes(query)) ||
-            (item.tags && item.tags.toLowerCase().includes(query)) ||
-            (item.actors && item.actors.toLowerCase().includes(query)) ||
-            (item.director && item.director.toLowerCase().includes(query)) ||
-            (item.decade && item.decade.toLowerCase().includes(query)) ||
-            (item.genre && item.genre.toLowerCase().includes(query));
-        console.log('Item:', item, 'Match:', match); // Debugging line
-        return match;
+        const matchDecade = !decade || (item.decade && item.decade.toLowerCase() === decade);
+        const matchActor = !actor || (item.actors && item.actors.toLowerCase().includes(actor));
+        const matchDirector = !director || (item.director && item.director.toLowerCase().includes(director));
+        const matchTagGenre = !tagGenre || (item.tags && item.tags.toLowerCase().includes(tagGenre)) || (item.genre && item.genre.toLowerCase().includes(tagGenre));
+        const matchSimilarStuff = !similarStuff || (item.similarStuff && item.similarStuff.toLowerCase().includes(similarStuff));
+
+        return matchDecade && matchActor && matchDirector && matchTagGenre && matchSimilarStuff;
     });
 
     console.log('Filtered Data:', filteredData); // Debugging line
@@ -50,13 +87,4 @@ function search() {
     if (filteredData.length === 0) {
         resultsDiv.innerHTML = '<p>No results found</p>';
     } else {
-        filteredData.forEach(item => {
-            const resultItem = document.createElement('div');
-            resultItem.className = 'result-item';
-            resultItem.innerHTML = `<a href="${item.link}">${item.name}</a>`;
-            resultsDiv.appendChild(resultItem);
-        });
-    }
-}
-
-window.onload = fetchData;
+     
