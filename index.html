@@ -13,7 +13,6 @@
         <label for="decade">Decade:</label>
         <select id="decade">
             <option value="">Any</option>
-            <!-- Options will be dynamically populated -->
         </select>
         <label for="actor">Actor:</label>
         <input type="text" id="actor" placeholder="Enter actor name">
@@ -22,7 +21,12 @@
         <label for="tagGenre">Tag/Genre:</label>
         <select id="tagGenre">
             <option value="">Any</option>
-            <!-- Options will be dynamically populated -->
         </select>
         <label for="similarStuff">Similar Stuff:</label>
-        <input type="text" id="similarStu
+        <input type="text" id="similarStuff" placeholder="Enter similar stuff">
+        <button onclick="search()">Search</button>
+    </div>
+    <div id="results"></div>
+    <script src="script.js"></script>
+</body>
+</html>
