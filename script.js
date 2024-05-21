@@ -8,13 +8,13 @@ async function fetchData() {
         data = csvText.split('\n').slice(1).map(row => {
             const columns = row.split(',');
             return {
-                name: columns[0] || '',
-                link: columns[1] || '',
-                tags: columns[2] || '',
-                actors: columns[3] || '',
-                director: columns[4] || '',
-                decade: columns[5] || '',
-                genre: columns[6] || ''
+                name: columns[0].trim() || '',
+                link: columns[1].trim() || '',
+                tags: columns[2].trim() || '',
+                actors: columns[3].trim() || '',
+                director: columns[4].trim() || '',
+                decade: columns[5].trim() || '',
+                genre: columns[6].trim() || ''
             };
         });
         console.log('Parsed Data:', data); // Debugging line
@@ -24,7 +24,7 @@ async function fetchData() {
 }
 
 function search() {
-    const query = document.getElementById('searchInput').value.toLowerCase();
+    const query = document.getElementById('searchInput').value.toLowerCase().trim();
     console.log('Search Query:', query); // Debugging line
     const resultsDiv = document.getElementById('results');
     resultsDiv.innerHTML = '';
