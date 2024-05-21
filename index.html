@@ -9,9 +9,20 @@
 </head>
 <body>
     <h1>YouTube Purchases Search</h1>
-    <input type="text" id="searchInput" placeholder="Search by name, tag, actor, director, or decade">
-    <button onclick="search()">Search</button>
-    <div id="results"></div>
-    <script src="script.js"></script>
-</body>
-</html>
+    <div class="search-container">
+        <label for="decade">Decade:</label>
+        <select id="decade">
+            <option value="">Any</option>
+            <!-- Options will be dynamically populated -->
+        </select>
+        <label for="actor">Actor:</label>
+        <input type="text" id="actor" placeholder="Enter actor name">
+        <label for="director">Director:</label>
+        <input type="text" id="director" placeholder="Enter director name">
+        <label for="tagGenre">Tag/Genre:</label>
+        <select id="tagGenre">
+            <option value="">Any</option>
+            <!-- Options will be dynamically populated -->
+        </select>
+        <label for="similarStuff">Similar Stuff:</label>
+        <input type="text" id="similarStu
