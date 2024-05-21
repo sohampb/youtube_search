@@ -16,6 +16,7 @@ async function fetchData() {
             genre: columns[6]
         };
     });
+    console.log('Parsed Data:', data); // Debugging line
 }
 
 function search() {
