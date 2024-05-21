@@ -5,19 +5,23 @@ async function fetchData() {
         const response = await fetch('data.csv');
         const csvText = await response.text();
         console.log('CSV Text:', csvText); // Debugging line
-        data = csvText.split('\n').slice(1).map(row => {
-            const columns = row.split(',').map(col => col.trim());
-            return {
-                name: columns[0] || '',
-                link: columns[1] || '',
-                tags: columns[2] || '',
-                actors: columns[3] || '',
-                director: columns[4] || '',
-                decade: columns[5] || '',
-                genre: columns[6] || ''
-            };
+
+        Papa.parse(csvText, {
+            header: true,
+            skipEmptyLines: true,
+            complete: function(results) {
+                data = results.data.map(row => ({
+                    name: row['Name'] ? row['Name'].trim() : '',
+                    link: row['Link'] ? row['Link'].trim() : '',
+                    tags: row['Tags'] ? row['Tags'].trim() : '',
+                    actors: row['Actors'] ? row['Actors'].trim() : '',
+                    director: row['Director'] ? row['Director'].trim() : '',
+                    decade: row['Decade'] ? row['Decade'].trim() : '',
+                    genre: row['Genre'] ? row['Genre'].trim() : ''
+                }));
+                console.log('Parsed Data:', data); // Debugging line
+            }
         });
-        console.log('Parsed Data:', data); // Debugging line
     } catch (error) {
         console.error('Error fetching data:', error); // Debugging line
     }
