@@ -6,7 +6,7 @@ async function fetchData() {
     try {
         const response = await fetch('data.csv');
         const csvText = await response.text();
-        console.log('CSV Text:', csvText); // Debugging line
+        console.log('CSV Text:', csvText);
 
         Papa.parse(csvText, {
             header: true,
@@ -22,12 +22,12 @@ async function fetchData() {
                     genre: row['Genre'] ? row['Genre'].trim() : '',
                     similarStuff: row['Similar Stuff'] ? row['Similar Stuff'].trim() : ''
                 }));
-                console.log('Parsed Data:', data); // Debugging line
+                console.log('Parsed Data:', data);
                 populateDropdowns();
             }
         });
     } catch (error) {
-        console.error('Error fetching data:', error); // Debugging line
+        console.error('Error fetching data:', error);
     }
 }
 
@@ -68,7 +68,7 @@ function search() {
     const tagGenre = document.getElementById('tagGenre').value.toLowerCase().trim();
     const similarStuff = document.getElementById('similarStuff').value.toLowerCase().trim();
 
-    console.log('Search Query:', { decade, actor, director, tagGenre, similarStuff }); // Debugging line
+    console.log('Search Query:', { decade, actor, director, tagGenre, similarStuff });
     const resultsDiv = document.getElementById('results');
     resultsDiv.innerHTML = '';
 
@@ -82,9 +82,18 @@ function search() {
         return matchDecade && matchActor && matchDirector && matchTagGenre && matchSimilarStuff;
     });
 
-    console.log('Filtered Data:', filteredData); // Debugging line
+    console.log('Filtered Data:', filteredData);
 
     if (filteredData.length === 0) {
         resultsDiv.innerHTML = '<p>No results found</p>';
     } else {
-     
+        filteredData.forEach(item => {
+            const resultItem = document.createElement('div');
+            resultItem.className = 'result-item';
+            resultItem.innerHTML = `<a href="${item.link}">${item.name}</a>`;
+            resultsDiv.appendChild(resultItem);
+        });
+    }
+}
+
+window.onload = fetchData;
