@@ -1,0 +1,15 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+}
+#searchInput {
+    width: 300px;
+    padding: 10px;
+    margin-right: 10px;
+}
+#results {
+    margin-top: 20px;
+}
+.result-item {
+    margin-bottom: 15px;
+}
