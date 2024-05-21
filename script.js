@@ -6,15 +6,15 @@ async function fetchData() {
         const csvText = await response.text();
         console.log('CSV Text:', csvText); // Debugging line
         data = csvText.split('\n').slice(1).map(row => {
-            const columns = row.split(',');
+            const columns = row.split(',').map(col => col.trim());
             return {
-                name: columns[0].trim() || '',
-                link: columns[1].trim() || '',
-                tags: columns[2].trim() || '',
-                actors: columns[3].trim() || '',
-                director: columns[4].trim() || '',
-                decade: columns[5].trim() || '',
-                genre: columns[6].trim() || ''
+                name: columns[0] || '',
+                link: columns[1] || '',
+                tags: columns[2] || '',
+                actors: columns[3] || '',
+                director: columns[4] || '',
+                decade: columns[5] || '',
+                genre: columns[6] || ''
             };
         });
         console.log('Parsed Data:', data); // Debugging line
@@ -29,14 +29,18 @@ function search() {
     const resultsDiv = document.getElementById('results');
     resultsDiv.innerHTML = '';
 
-    const filteredData = data.filter(item =>
-        (item.name && item.name.toLowerCase().includes(query)) ||
-        (item.tags && item.tags.toLowerCase().includes(query)) ||
-        (item.actors && item.actors.toLowerCase().includes(query)) ||
-        (item.director && item.director.toLowerCase().includes(query)) ||
-        (item.decade && item.decade.toLowerCase().includes(query)) ||
-        (item.genre && item.genre.toLowerCase().includes(query))
-    );
+    const filteredData = data.filter(item => {
+        const match = 
+            (item.name && item.name.toLowerCase().includes(query)) ||
+            (item.tags && item.tags.toLowerCase().includes(query)) ||
+            (item.actors && item.actors.toLowerCase().includes(query)) ||
+            (item.director && item.director.toLowerCase().includes(query)) ||
+            (item.decade && item.decade.toLowerCase().includes(query)) ||
+            (item.genre && item.genre.toLowerCase().includes(query));
+        console.log('Item:', item, 'Match:', match); // Debugging line
+        return match;
+    });
+
     console.log('Filtered Data:', filteredData); // Debugging line
 
     if (filteredData.length === 0) {
