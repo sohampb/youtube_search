@@ -3,6 +3,7 @@ let data = [];
 async function fetchData() {
     const response = await fetch('data.csv');
     const csvText = await response.text();
+    console.log('CSV Text:', csvText); // Debugging line
     data = csvText.split('\n').slice(1).map(row => {
         const columns = row.split(',');
         return {
